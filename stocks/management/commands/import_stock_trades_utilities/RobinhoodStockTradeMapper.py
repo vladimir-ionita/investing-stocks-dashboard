@@ -2,6 +2,13 @@ from enum import Enum
 from datetime import datetime
 
 
+class RobinhoodStockTradeMapper:
+    @staticmethod
+    def get_share_trades_from_emails(email_body_list):
+        return [x for x in map(RobinhoodShareTradeFactory.make_share_trade_from_email_body, email_body_list)
+                if x is not None]
+
+
 class RobinhoodShareTradeFactory:
     @classmethod
     def make_share_trade_from_email_body(cls, email_body):
