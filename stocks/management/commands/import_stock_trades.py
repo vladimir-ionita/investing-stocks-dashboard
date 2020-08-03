@@ -1,7 +1,9 @@
 from django.core.management.base import BaseCommand
 
+from stocks.models import StockSymbol, StockTrade
+
 from .import_stock_trades_utilities.EmailImporter import EmailImporter
-from .import_stock_trades_utilities.RobinhoodStockTradeMapper import RobinhoodStockTradeMapper
+from .import_stock_trades_utilities.RobinhoodStockTradeMapper import RobinhoodStockTradeMapper, TradeType
 
 
 class Command(BaseCommand):
@@ -25,3 +27,17 @@ class Command(BaseCommand):
         if verbose:
             self.stdout.write(self.style.SUCCESS('Successfully fetched {} stock trades'.format(len(share_trades))))
 
+        stock_trades_models = []
+        for trade in share_trades:
+            stock_symbol, _ = StockSymbol.objects.get_or_create(symbol=trade.stock_symbol)
+            trade_model = StockTrade(stock=stock_symbol,
+                                     time=trade.datetime,
+                                     share_price=trade.share_price,
+                                     share_amount=trade.share_amount,
+                                     total_amount=trade.total_amount,
+                                     trade_type=trade.trade_type == TradeType.BUY)
+            stock_trades_models.append(trade_model)
+
+        StockTrade.objects.bulk_create(stock_trades_models, ignore_conflicts=True)
+        if verbose:
+            self.stdout.write(self.style.SUCCESS('Successfully imported {} stock trades'.format(len(share_trades))))
