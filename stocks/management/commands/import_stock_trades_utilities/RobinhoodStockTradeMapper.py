@@ -1,5 +1,6 @@
 from enum import Enum
 from datetime import datetime
+import pytz
 
 
 class RobinhoodStockTradeMapper:
@@ -56,13 +57,14 @@ class RobinhoodShareTradeFactory:
             trade_description_parts[TRADE_DATETIME_PERIOD_INDEX].rstrip()[:-1],
         ])
         date_time_format = '%B %d %Y %I:%M %p'
+        timezone = pytz.timezone("EST")
 
         return FractionalShareTrade(trade_description_parts[TRADE_STOCK_INDEX],
                                     TradeType(trade_description_parts[TRADE_TYPE_INDEX]),
                                     trade_description_parts[TRADE_SHARES_AMOUNT_INDEX],
                                     trade_description_parts[TRADE_SHARE_PRICE_INDEX],
                                     trade_description_parts[TRADE_PRICE_AMOUNT_INDEX],
-                                    datetime.strptime(date_time_string, date_time_format))
+                                    timezone.localize(datetime.strptime(date_time_string, date_time_format)))
 
     @classmethod
     def __make_whole_share_trade(cls, trade_description_parts):
@@ -84,12 +86,13 @@ class RobinhoodShareTradeFactory:
             trade_description_parts[TRADE_DATETIME_PERIOD_INDEX].rstrip()[:-1],
         ])
         date_time_format = '%B %d %Y %I:%M %p'
+        timezone = pytz.timezone("EST")
 
         return WholeShareTrade(trade_description_parts[TRADE_STOCK_INDEX],
                                TradeType(trade_description_parts[TRADE_TYPE_INDEX]),
                                trade_description_parts[TRADE_SHARES_AMOUNT_INDEX],
                                trade_description_parts[TRADE_SHARE_PRICE_INDEX],
-                               datetime.strptime(date_time_string, date_time_format))
+                               timezone.localize(datetime.strptime(date_time_string, date_time_format)))
 
 
 class TradeType(Enum):
