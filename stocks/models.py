@@ -20,6 +20,11 @@ class StockTrade(models.Model):
         (False, 'Sell')
     ))
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['stock', 'time', 'share_price', 'total_amount'], name='unique trade')
+        ]
+
     def __str__(self):
         trade_type_name = "Buy" if self.trade_type else "Sell"
         return "{} {}".format(trade_type_name, self.stock)
