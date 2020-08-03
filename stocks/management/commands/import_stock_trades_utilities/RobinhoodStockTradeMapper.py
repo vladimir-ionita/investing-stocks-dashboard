@@ -124,12 +124,14 @@ class FractionalShareTrade:
         self.datetime = DataTypeValidator.validate_data_type(time, datetime, 'Time must be a datetime.')
 
     def __str__(self):
-        return ' '.join([self.trade_type.name,
-                         self.stock_symbol,
-                         self.share_amount,
-                         self.share_price,
-                         self.total_amount,
-                         str(self.datetime)])
+        return '{} {} {} {} {} {}'.format(
+            self.trade_type.name,
+            self.stock_symbol,
+            self.share_amount,
+            self.share_price,
+            self.total_amount,
+            self.datetime
+        )
 
 
 class DataTypeValidator:
