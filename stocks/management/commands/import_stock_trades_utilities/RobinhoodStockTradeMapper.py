@@ -99,11 +99,12 @@ class TradeType(Enum):
 
 class WholeShareTrade:
     def __init__(self, stock_symbol, trade_type, share_amount, share_price, time):
-        self.stock_symbol = stock_symbol
-        self.trade_type = trade_type
-        self.share_amount = share_amount
-        self.share_price = share_price
-        self.datetime = time
+        self.stock_symbol = DataTypeValidator.validate_data_type(stock_symbol, str, 'Stock symbol must be a string.')
+        self.trade_type = DataTypeValidator.validate_data_type(trade_type, TradeType, 'Trade type must be a TradeType.')
+        self.share_amount = DataTypeValidator.validate_data_type(share_amount, float, 'Share amount must be a float.')
+        self.share_price = DataTypeValidator.validate_data_type(share_price, float, 'Share price must be a float.')
+        self.total_amount = self.share_amount * self.share_price
+        self.datetime = DataTypeValidator.validate_data_type(time, datetime, 'Time must be a datetime.')
 
     def __str__(self):
         return ' '.join([self.trade_type.name,
