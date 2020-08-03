@@ -59,12 +59,14 @@ class RobinhoodShareTradeFactory:
         date_time_format = '%B %d %Y %I:%M %p'
         timezone = pytz.timezone("EST")
 
-        return FractionalShareTrade(trade_description_parts[TRADE_STOCK_INDEX],
-                                    TradeType(trade_description_parts[TRADE_TYPE_INDEX]),
-                                    trade_description_parts[TRADE_SHARES_AMOUNT_INDEX],
-                                    trade_description_parts[TRADE_SHARE_PRICE_INDEX],
-                                    trade_description_parts[TRADE_PRICE_AMOUNT_INDEX],
-                                    timezone.localize(datetime.strptime(date_time_string, date_time_format)))
+        return FractionalShareTrade(
+            stock_symbol=trade_description_parts[TRADE_STOCK_INDEX],
+            trade_type=TradeType(trade_description_parts[TRADE_TYPE_INDEX]),
+            share_amount=float(trade_description_parts[TRADE_SHARES_AMOUNT_INDEX]),
+            share_price=float(trade_description_parts[TRADE_SHARE_PRICE_INDEX][1:]),
+            total_amount=float(trade_description_parts[TRADE_PRICE_AMOUNT_INDEX][1:]),
+            time=timezone.localize(datetime.strptime(date_time_string, date_time_format))
+        )
 
     @classmethod
     def __make_whole_share_trade(cls, trade_description_parts):
@@ -88,11 +90,13 @@ class RobinhoodShareTradeFactory:
         date_time_format = '%B %d %Y %I:%M %p'
         timezone = pytz.timezone("EST")
 
-        return WholeShareTrade(trade_description_parts[TRADE_STOCK_INDEX],
-                               TradeType(trade_description_parts[TRADE_TYPE_INDEX]),
-                               trade_description_parts[TRADE_SHARES_AMOUNT_INDEX],
-                               trade_description_parts[TRADE_SHARE_PRICE_INDEX],
-                               timezone.localize(datetime.strptime(date_time_string, date_time_format)))
+        return WholeShareTrade(
+            stock_symbol=trade_description_parts[TRADE_STOCK_INDEX],
+            trade_type=TradeType(trade_description_parts[TRADE_TYPE_INDEX]),
+            share_amount=float(trade_description_parts[TRADE_SHARES_AMOUNT_INDEX]),
+            share_price=float(trade_description_parts[TRADE_SHARE_PRICE_INDEX][1:]),
+            time=timezone.localize(datetime.strptime(date_time_string, date_time_format))
+        )
 
 
 class TradeType(Enum):
