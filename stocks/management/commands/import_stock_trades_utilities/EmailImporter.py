@@ -72,8 +72,6 @@ class EmailImporter:
                             len(email_body_list),
                             len(emails_id_list)
                         ))
-        if self.verbose:
-            self.stdout.write('')
 
         return email_body_list
 
