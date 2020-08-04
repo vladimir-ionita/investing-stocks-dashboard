@@ -65,7 +65,7 @@ class RobinhoodShareTradeFactory:
 
         return FractionalShareStockTrade(
             stock_symbol=trade_description_parts[TRADE_STOCK_INDEX],
-            trade_type=TradeType(trade_description_parts[TRADE_TYPE_INDEX]),
+            trade_type=StockTradeType(trade_description_parts[TRADE_TYPE_INDEX]),
             share_amount=float(trade_description_parts[TRADE_SHARES_AMOUNT_INDEX]),
             share_price=float(trade_description_parts[TRADE_SHARE_PRICE_INDEX][1:]),
             total_amount=float(trade_description_parts[TRADE_PRICE_AMOUNT_INDEX][1:]),
@@ -101,5 +101,3 @@ class RobinhoodShareTradeFactory:
             share_price=float(trade_description_parts[TRADE_SHARE_PRICE_INDEX][1:]),
             time=timezone.localize(datetime.strptime(date_time_string, date_time_format))
         )
-
-
