@@ -22,11 +22,11 @@ class RobinhoodStockTradeFactory:
             if line.startswith("Your market order") \
                     and "was partially executed" not in line \
                     and "was canceled on" not in line:
-                return cls.make_share_trade_from_trade_description(line)
+                return cls.make_stock_trade_from_trade_description(line)
         return None
 
     @classmethod
-    def make_share_trade_from_trade_description(cls, trade_description):
+    def make_stock_trade_from_trade_description(cls, trade_description):
         trade_description_parts = trade_description.split(' ')
         if cls.__check_if_whole_share_trade(trade_description_parts):
             return cls.__make_whole_share_trade(trade_description_parts)
