@@ -2,7 +2,7 @@ from django.db import models
 
 
 class StockSymbol(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, blank=True)
     symbol = models.CharField(max_length=5)
 
     def __str__(self):
@@ -19,6 +19,11 @@ class StockTrade(models.Model):
         (True, 'Buy'),
         (False, 'Sell')
     ))
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['stock', 'time', 'share_price', 'total_amount'], name='unique trade')
+        ]
 
     def __str__(self):
         trade_type_name = "Buy" if self.trade_type else "Sell"
