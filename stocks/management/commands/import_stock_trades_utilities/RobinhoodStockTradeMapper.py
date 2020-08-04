@@ -90,7 +90,7 @@ class RobinhoodShareTradeFactory:
         date_time_format = '%B %d %Y %I:%M %p'
         timezone = pytz.timezone("EST")
 
-        return WholeShareTrade(
+        return WholeShareStockTrade(
             stock_symbol=trade_description_parts[TRADE_STOCK_INDEX],
             trade_type=TradeType(trade_description_parts[TRADE_TYPE_INDEX]),
             share_amount=float(trade_description_parts[TRADE_SHARES_AMOUNT_INDEX]),
@@ -104,7 +104,7 @@ class TradeType(Enum):
     SELL = 'sell'
 
 
-class WholeShareTrade:
+class WholeShareStockTrade:
     def __init__(self, stock_symbol, trade_type, share_amount, share_price, time):
         self.stock_symbol = DataTypeValidator.validate_data_type(stock_symbol, str, 'Stock symbol must be a string.')
         self.trade_type = DataTypeValidator.validate_data_type(trade_type, TradeType, 'Trade type must be a TradeType.')
