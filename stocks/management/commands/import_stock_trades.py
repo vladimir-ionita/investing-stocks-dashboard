@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand
 
 from stocks.models import StockSymbol, StockTrade, BrokerageService
 
-from .import_stock_trades_utilities.EmailImporter import EmailImporter
+from .import_stock_trades_utilities.email.EmailImporter import EmailImporter
 from .import_stock_trades_utilities.RobinhoodStockTradeMapper import RobinhoodStockTradeMapper, TradeType
 
 
