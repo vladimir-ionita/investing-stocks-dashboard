@@ -1,9 +1,8 @@
 from django.contrib import admin
 
-from . import models
+from stocks.models import StockTrade
 
-admin.site.register(models.StockSymbol)
-admin.site.register(models.BrokerageService)
+from stocks.admin.utilities import custom_titled_filter
 
 
 class TradeTypeListFilter(admin.SimpleListFilter):
@@ -34,10 +33,14 @@ class TradeTypeListFilter(admin.SimpleListFilter):
         return queryset.all()
 
 
-@admin.register(models.StockTrade)
+@admin.register(StockTrade)
 class StockTradeAdmin(admin.ModelAdmin):
-    list_display = ('stock', 'share_price', 'share_amount', 'total_amount', 'trade_type', 'time',)
-    list_filter = ('stock__symbol', TradeTypeListFilter)
+    list_display = ('stock__symbol', 'share_price', 'share_amount', 'total_amount', 'trade_type', 'time',)
+    list_filter = (
+        'stock__symbol',
+        TradeTypeListFilter,
+        ('brokerage_service__name', custom_titled_filter('brokerage service'))
+    )
     fieldsets = ()
 
     search_fields = ('stock',)
@@ -49,3 +52,7 @@ class StockTradeAdmin(admin.ModelAdmin):
             return 'stock', 'share_price', 'share_amount', 'total_amount', 'trade_type', 'time',
         else:       # create mode
             return []
+
+    def stock__symbol(self, obj):
+        return obj.stock.symbol
+    stock__symbol.short_description = 'stock'
