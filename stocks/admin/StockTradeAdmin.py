@@ -2,6 +2,8 @@ from django.contrib import admin
 
 from stocks.models import StockTrade
 
+from stocks.admin.utilities import custom_titled_filter
+
 
 class TradeTypeListFilter(admin.SimpleListFilter):
     title = 'trade type'
@@ -34,7 +36,11 @@ class TradeTypeListFilter(admin.SimpleListFilter):
 @admin.register(StockTrade)
 class StockTradeAdmin(admin.ModelAdmin):
     list_display = ('stock', 'share_price', 'share_amount', 'total_amount', 'trade_type', 'time',)
-    list_filter = ('stock__symbol', TradeTypeListFilter)
+    list_filter = (
+        'stock__symbol',
+        TradeTypeListFilter,
+        ('brokerage_service__name', custom_titled_filter('brokerage service'))
+    )
     fieldsets = ()
 
     search_fields = ('stock',)
