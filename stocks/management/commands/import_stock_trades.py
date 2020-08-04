@@ -1,10 +1,12 @@
 from django.core.management.base import BaseCommand
 
-from stocks.models import StockSymbol, StockTrade, BrokerageService
+from stocks.models import BrokerageService, StockSymbol, StockTrade
 
 from .import_stock_trades_utilities.email.EmailImporter import EmailImporter
 from .import_stock_trades_utilities.stocks.robinhood.RobinhoodStockTradeMapper import RobinhoodStockTradeMapper
 from .import_stock_trades_utilities.stocks.StockTradeType import StockTradeType
+
+BROKERAGE_SERVICE_ROBINHOOD = "Robinhood"
 
 
 class Command(BaseCommand):
@@ -21,16 +23,23 @@ class Command(BaseCommand):
         search_criteria = options['search_criteria']
         verbose = int(options['verbosity']) > 0
 
-        email_body_list = EmailImporter(username, password, search_criteria, verbose, self.stdout)\
-            .import_emails_body_list()
-        share_trades = RobinhoodStockTradeMapper.get_stock_trades_from_emails(email_body_list)
+        email_body_list = EmailImporter(
+            username,
+            password,
+            search_criteria,
+            verbose,
+            self.stdout
+        ).import_emails_body_list()
+        stock_trade_objects = RobinhoodStockTradeMapper.get_stock_trades_from_emails(email_body_list)
 
         if verbose:
-            self.stdout.write(self.style.SUCCESS('Successfully fetched {} stock trades'.format(len(share_trades))))
+            self.stdout.write(self.style.SUCCESS(
+                'Successfully fetched {} stock trades'.format(len(stock_trade_objects)))
+            )
 
         stock_trades_models = []
-        brokerage_service, _ = BrokerageService.objects.get_or_create(name="Robinhood")
-        for trade in share_trades:
+        brokerage_service, _ = BrokerageService.objects.get_or_create(name=BROKERAGE_SERVICE_ROBINHOOD)
+        for trade in stock_trade_objects:
             stock_symbol, _ = StockSymbol.objects.get_or_create(symbol=trade.stock_symbol)
             trade_model = StockTrade(stock=stock_symbol,
                                      time=trade.datetime,
@@ -43,4 +52,6 @@ class Command(BaseCommand):
 
         StockTrade.objects.bulk_create(stock_trades_models, ignore_conflicts=True)
         if verbose:
-            self.stdout.write(self.style.SUCCESS('Successfully imported {} stock trades'.format(len(share_trades))))
+            self.stdout.write(self.style.SUCCESS(
+                'Successfully imported {} stock trades'.format(len(stock_trade_objects)))
+            )
