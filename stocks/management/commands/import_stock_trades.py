@@ -50,8 +50,8 @@ class Command(BaseCommand):
                                      brokerage_service=brokerage_service)
             stock_trades_models.append(trade_model)
 
-        StockTrade.objects.bulk_create(stock_trades_models, ignore_conflicts=True)
+        stm_amount = StockTrade.objects.bulk_create(stock_trades_models, ignore_conflicts=True)
         if verbose:
             self.stdout.write(self.style.SUCCESS(
-                'Successfully imported {} stock trades'.format(len(stock_trade_objects)))
+                'Successfully imported {} stock trades'.format(len(stm_amount)))
             )
