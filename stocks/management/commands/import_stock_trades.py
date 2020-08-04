@@ -3,7 +3,8 @@ from django.core.management.base import BaseCommand
 from stocks.models import StockSymbol, StockTrade, BrokerageService
 
 from .import_stock_trades_utilities.email.EmailImporter import EmailImporter
-from .import_stock_trades_utilities.stocks.robinhood.RobinhoodStockTradeMapper import RobinhoodStockTradeMapper, TradeType
+from .import_stock_trades_utilities.stocks.robinhood.RobinhoodStockTradeMapper import RobinhoodStockTradeMapper
+from .import_stock_trades_utilities.stocks.StockTradeType import TradeType
 
 
 class Command(BaseCommand):

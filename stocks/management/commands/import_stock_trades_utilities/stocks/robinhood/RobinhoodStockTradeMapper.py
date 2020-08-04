@@ -1,8 +1,8 @@
-from enum import Enum
 from datetime import datetime
 import pytz
 
 from stocks.management.commands.import_stock_trades_utilities.DataTypeValidator import DataTypeValidator
+from stocks.management.commands.import_stock_trades_utilities.stocks.StockTradeType import TradeType
 
 
 class RobinhoodStockTradeMapper:
@@ -99,11 +99,6 @@ class RobinhoodShareTradeFactory:
             share_price=float(trade_description_parts[TRADE_SHARE_PRICE_INDEX][1:]),
             time=timezone.localize(datetime.strptime(date_time_string, date_time_format))
         )
-
-
-class TradeType(Enum):
-    BUY = 'buy'
-    SELL = 'sell'
 
 
 class WholeShareStockTrade:
