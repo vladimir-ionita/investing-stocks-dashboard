@@ -1,28 +1,32 @@
-from enum import Enum
 from datetime import datetime
 import pytz
+
+from stocks.management.commands.import_stock_trades_utilities.stocks.StockTradeType import StockTradeType
+from stocks.management.commands.import_stock_trades_utilities.stocks.WholeShareStockTrade import WholeShareStockTrade
+from stocks.management.commands.import_stock_trades_utilities.stocks.FractionalShareStockTrade import \
+    FractionalShareStockTrade
 
 
 class RobinhoodStockTradeMapper:
     @staticmethod
-    def get_share_trades_from_emails(email_body_list):
-        return [x for x in map(RobinhoodShareTradeFactory.make_share_trade_from_email_body, email_body_list)
+    def get_stock_trades_from_emails(email_body_list):
+        return [x for x in map(RobinhoodStockTradeFactory.make_stock_trade_from_email_body, email_body_list)
                 if x is not None]
 
 
-class RobinhoodShareTradeFactory:
+class RobinhoodStockTradeFactory:
     @classmethod
-    def make_share_trade_from_email_body(cls, email_body):
+    def make_stock_trade_from_email_body(cls, email_body):
         body_parts = email_body.split('\n')
         for line in body_parts:
             if line.startswith("Your market order") \
                     and "was partially executed" not in line \
                     and "was canceled on" not in line:
-                return cls.make_share_trade_from_trade_description(line)
+                return cls.make_stock_trade_from_trade_description(line)
         return None
 
     @classmethod
-    def make_share_trade_from_trade_description(cls, trade_description):
+    def make_stock_trade_from_trade_description(cls, trade_description):
         trade_description_parts = trade_description.split(' ')
         if cls.__check_if_whole_share_trade(trade_description_parts):
             return cls.__make_whole_share_trade(trade_description_parts)
@@ -59,9 +63,9 @@ class RobinhoodShareTradeFactory:
         date_time_format = '%B %d %Y %I:%M %p'
         timezone = pytz.timezone("EST")
 
-        return FractionalShareTrade(
+        return FractionalShareStockTrade(
             stock_symbol=trade_description_parts[TRADE_STOCK_INDEX],
-            trade_type=TradeType(trade_description_parts[TRADE_TYPE_INDEX]),
+            trade_type=StockTradeType(trade_description_parts[TRADE_TYPE_INDEX]),
             share_amount=float(trade_description_parts[TRADE_SHARES_AMOUNT_INDEX]),
             share_price=float(trade_description_parts[TRADE_SHARE_PRICE_INDEX][1:]),
             total_amount=float(trade_description_parts[TRADE_PRICE_AMOUNT_INDEX][1:]),
@@ -90,58 +94,10 @@ class RobinhoodShareTradeFactory:
         date_time_format = '%B %d %Y %I:%M %p'
         timezone = pytz.timezone("EST")
 
-        return WholeShareTrade(
+        return WholeShareStockTrade(
             stock_symbol=trade_description_parts[TRADE_STOCK_INDEX],
-            trade_type=TradeType(trade_description_parts[TRADE_TYPE_INDEX]),
+            trade_type=StockTradeType(trade_description_parts[TRADE_TYPE_INDEX]),
             share_amount=float(trade_description_parts[TRADE_SHARES_AMOUNT_INDEX]),
             share_price=float(trade_description_parts[TRADE_SHARE_PRICE_INDEX][1:]),
             time=timezone.localize(datetime.strptime(date_time_string, date_time_format))
         )
-
-
-class TradeType(Enum):
-    BUY = 'buy'
-    SELL = 'sell'
-
-
-class WholeShareTrade:
-    def __init__(self, stock_symbol, trade_type, share_amount, share_price, time):
-        self.stock_symbol = DataTypeValidator.validate_data_type(stock_symbol, str, 'Stock symbol must be a string.')
-        self.trade_type = DataTypeValidator.validate_data_type(trade_type, TradeType, 'Trade type must be a TradeType.')
-        self.share_amount = DataTypeValidator.validate_data_type(share_amount, float, 'Share amount must be a float.')
-        self.share_price = DataTypeValidator.validate_data_type(share_price, float, 'Share price must be a float.')
-        self.total_amount = self.share_amount * self.share_price
-        self.datetime = DataTypeValidator.validate_data_type(time, datetime, 'Time must be a datetime.')
-
-    def __str__(self):
-        return f'{self.trade_type.name} {self.stock_symbol} {self.share_amount} {self.share_price} ' \
-               f'{self.total_amount} {self.datetime}'
-
-
-class FractionalShareTrade:
-    def __init__(self, stock_symbol, trade_type, share_amount, share_price, total_amount, time):
-        self.stock_symbol = DataTypeValidator.validate_data_type(stock_symbol, str, 'Stock symbol must be a string.')
-        self.trade_type = DataTypeValidator.validate_data_type(trade_type, TradeType, 'Trade type must be a TradeType.')
-        self.share_amount = DataTypeValidator.validate_data_type(share_amount, float, 'Share amount must be a float.')
-        self.share_price = DataTypeValidator.validate_data_type(share_price, float, 'Share price must be a float.')
-        self.total_amount = DataTypeValidator.validate_data_type(total_amount, float, 'Total amount must be float.')
-        self.datetime = DataTypeValidator.validate_data_type(time, datetime, 'Time must be a datetime.')
-
-    def __str__(self):
-        return '{} {} {} {} {} {}'.format(
-            self.trade_type.name,
-            self.stock_symbol,
-            self.share_amount,
-            self.share_price,
-            self.total_amount,
-            self.datetime
-        )
-
-
-class DataTypeValidator:
-    @staticmethod
-    def validate_data_type(variable, data_type, exception_error_message):
-        if isinstance(variable, data_type):
-            return variable
-        else:
-            raise ValueError(exception_error_message)
