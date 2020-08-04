@@ -35,7 +35,7 @@ class TradeTypeListFilter(admin.SimpleListFilter):
 
 @admin.register(StockTrade)
 class StockTradeAdmin(admin.ModelAdmin):
-    list_display = ('stock', 'share_price', 'share_amount', 'total_amount', 'trade_type', 'time',)
+    list_display = ('stock__symbol', 'share_price', 'share_amount', 'total_amount', 'trade_type', 'time',)
     list_filter = (
         'stock__symbol',
         TradeTypeListFilter,
@@ -52,3 +52,7 @@ class StockTradeAdmin(admin.ModelAdmin):
             return 'stock', 'share_price', 'share_amount', 'total_amount', 'trade_type', 'time',
         else:       # create mode
             return []
+
+    def stock__symbol(self, obj):
+        return obj.stock.symbol
+    stock__symbol.short_description = 'stock'
