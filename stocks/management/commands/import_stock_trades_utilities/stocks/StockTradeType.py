@@ -1,6 +1,6 @@
 from enum import Enum
 
 
-class TradeType(Enum):
+class StockTradeType(Enum):
     BUY = 'buy'
     SELL = 'sell'

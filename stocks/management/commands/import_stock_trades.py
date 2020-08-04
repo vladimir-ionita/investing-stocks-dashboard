@@ -4,7 +4,7 @@ from stocks.models import StockSymbol, StockTrade, BrokerageService
 
 from .import_stock_trades_utilities.email.EmailImporter import EmailImporter
 from .import_stock_trades_utilities.stocks.robinhood.RobinhoodStockTradeMapper import RobinhoodStockTradeMapper
-from .import_stock_trades_utilities.stocks.StockTradeType import TradeType
+from .import_stock_trades_utilities.stocks.StockTradeType import StockTradeType
 
 
 class Command(BaseCommand):
@@ -37,7 +37,7 @@ class Command(BaseCommand):
                                      share_price=trade.share_price,
                                      share_amount=trade.share_amount,
                                      total_amount=trade.total_amount,
-                                     trade_type=trade.trade_type == TradeType.BUY,
+                                     trade_type=trade.trade_type == StockTradeType.BUY,
                                      brokerage_service=brokerage_service)
             stock_trades_models.append(trade_model)
 
