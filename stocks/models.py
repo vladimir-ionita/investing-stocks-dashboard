@@ -9,6 +9,13 @@ class StockSymbol(models.Model):
         return self.name
 
 
+class BrokerageService(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+
 class StockTrade(models.Model):
     stock = models.ForeignKey(StockSymbol, on_delete=models.CASCADE)
     time = models.DateTimeField()
