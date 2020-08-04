@@ -57,7 +57,7 @@ Each line in the file must represent a trade using the following format (keep in
 
 To use the command, you must pass the file path as an argument:
 
-`python manage.py import_stock_trades_local <file path>`
+`python manage.py import_stock_trades_file <file path>`
 
 ### Considerations
 All the trades are unique. For two trades to be the same, the following fields must be the same:

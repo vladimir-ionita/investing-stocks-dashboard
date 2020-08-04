@@ -6,7 +6,7 @@ from django.core.management.base import BaseCommand
 from stocks.models import BrokerageService, StockSymbol, StockTrade
 
 from .import_stock_trades_utilities.stocks.StockTradeType import StockTradeType
-from .import_stock_trades_local_utilities.FileUtilities import get_sanitized_content_from_file
+from .import_stock_trades_file_utilities.FileUtilities import get_sanitized_content_from_file
 
 
 class Command(BaseCommand):
