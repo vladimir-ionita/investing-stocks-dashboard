@@ -48,6 +48,17 @@ enabling "Less secure apps", Gmail will send you an email describing the problem
 
 Search criteria must follow the format explained in [RFC3501, Section 6.4.4](https://tools.ietf.org/html/rfc3501#section-6.4.4)
 
+#### `import_stocks_trades_local`
+This command allows you to import stock trades from a local file.
+The data in the file must be saved in a specific format.
+Each line in the file must represent a trade using the following format (keep in mind the datetime format as well):
+
+`<stock symbol>|<BUY or SELL>|<share amount>|<share price>|<total trade price>|<datetime (05/17/2020 10:03:16 EST5EDT)>|<brokerage service>`
+
+To use the command, you must pass the file path as an argument:
+
+`python manage.py import_stock_trades_local <file path>`
+
 ### Considerations
 All the trades are unique. For two trades to be the same, the following fields must be the same:
 - stock symbol (or ticker)
@@ -59,4 +70,4 @@ If a new trade is tried to be imported and the combination of the above data alr
 
 ### In progress
 - Implement access to more email servers (currently only Gmail is supported) 
-- WeBull import command
+- Import from CSV
