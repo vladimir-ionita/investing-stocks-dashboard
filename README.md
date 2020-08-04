@@ -11,7 +11,7 @@ Although this might not be useful for seasoned investors with big, established p
 it might be quite useful for beginners that have a diversified portfolio
 and watch closely the investments they've made.
 
-### Installation
+## Installation
 This tool is built as a django web service.
 
 Some knowledge about running python code and django web services is required.
@@ -59,7 +59,7 @@ To use the command, you must pass the file path as an argument:
 
 `python manage.py import_stock_trades_file <file path>`
 
-### Considerations
+## Considerations
 All the trades are unique. For two trades to be the same, the following fields must be the same:
 - stock symbol (or ticker)
 - time of trade
@@ -68,6 +68,6 @@ All the trades are unique. For two trades to be the same, the following fields m
 
 If a new trade is tried to be imported and the combination of the above data already exists, it will be ignored. 
 
-### In progress
+## In progress
 - Implement access to more email servers (currently only Gmail is supported) 
 - Import from CSV
