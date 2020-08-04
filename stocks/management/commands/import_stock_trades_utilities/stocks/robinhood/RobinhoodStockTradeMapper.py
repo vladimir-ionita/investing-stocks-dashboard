@@ -9,8 +9,8 @@ from stocks.management.commands.import_stock_trades_utilities.stocks.FractionalS
 
 class RobinhoodStockTradeMapper:
     @staticmethod
-    def get_share_trades_from_emails(email_body_list):
         return [x for x in map(RobinhoodShareTradeFactory.make_share_trade_from_email_body, email_body_list)
+    def get_stock_trades_from_emails(email_body_list):
                 if x is not None]
 
 

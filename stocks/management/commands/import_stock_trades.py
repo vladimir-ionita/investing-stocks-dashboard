@@ -23,7 +23,7 @@ class Command(BaseCommand):
 
         email_body_list = EmailImporter(username, password, search_criteria, verbose, self.stdout)\
             .import_emails_body_list()
-        share_trades = RobinhoodStockTradeMapper.get_share_trades_from_emails(email_body_list)
+        share_trades = RobinhoodStockTradeMapper.get_stock_trades_from_emails(email_body_list)
 
         if verbose:
             self.stdout.write(self.style.SUCCESS('Successfully fetched {} stock trades'.format(len(share_trades))))
