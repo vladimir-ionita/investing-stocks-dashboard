@@ -2,6 +2,8 @@ from enum import Enum
 from datetime import datetime
 import pytz
 
+from stocks.management.commands.import_stock_trades_utilities.DataTypeValidator import DataTypeValidator
+
 
 class RobinhoodStockTradeMapper:
     @staticmethod
@@ -136,12 +138,3 @@ class FractionalShareStockTrade:
             self.total_amount,
             self.datetime
         )
-
-
-class DataTypeValidator:
-    @staticmethod
-    def validate_data_type(variable, data_type, exception_error_message):
-        if isinstance(variable, data_type):
-            return variable
-        else:
-            raise ValueError(exception_error_message)
