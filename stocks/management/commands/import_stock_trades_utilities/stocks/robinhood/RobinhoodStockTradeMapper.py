@@ -10,13 +10,13 @@ from stocks.management.commands.import_stock_trades_utilities.stocks.FractionalS
 class RobinhoodStockTradeMapper:
     @staticmethod
     def get_stock_trades_from_emails(email_body_list):
-        return [x for x in map(RobinhoodStockTradeFactory.make_share_trade_from_email_body, email_body_list)
+        return [x for x in map(RobinhoodStockTradeFactory.make_stock_trade_from_email_body, email_body_list)
                 if x is not None]
 
 
 class RobinhoodStockTradeFactory:
     @classmethod
-    def make_share_trade_from_email_body(cls, email_body):
+    def make_stock_trade_from_email_body(cls, email_body):
         body_parts = email_body.split('\n')
         for line in body_parts:
             if line.startswith("Your market order") \
