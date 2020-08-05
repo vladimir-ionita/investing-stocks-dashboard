@@ -29,10 +29,12 @@ class RobinhoodStockTradeFactory:
     def make_stock_trade_from_trade_description(cls, trade_description):
         trade_description = cls.__remove_html_tags(trade_description)
         trade_description_parts = trade_description.split(' ')
+
+        special_sale = cls.__check_if_special_sell_trade(trade_description)
         if cls.__check_if_whole_share_trade(trade_description_parts):
             return cls.__make_whole_share_trade(trade_description_parts)
         else:
-            return cls.__make_fractional_share_trade(trade_description_parts)
+            return cls.__make_fractional_share_trade(trade_description_parts, special_sale)
 
     @classmethod
     def __remove_html_tags(cls, text):
@@ -48,7 +50,11 @@ class RobinhoodStockTradeFactory:
             startswith(WHOLE_SHARE_TRADE_MARKER_WORD)
 
     @classmethod
-    def __make_fractional_share_trade(cls, trade_description_parts):
+    def __check_if_special_sell_trade(cls, trade_description):
+        return "You received " in trade_description
+
+    @classmethod
+    def __make_fractional_share_trade(cls, trade_description_parts, special_sell=False):
         TRADE_TYPE_INDEX = 4
         TRADE_PRICE_AMOUNT_INDEX = 5
         TRADE_STOCK_INDEX = 7
@@ -59,6 +65,9 @@ class RobinhoodStockTradeFactory:
         TRADE_DATETIME_PERIOD_INDEX = 16
         TRADE_SHARES_AMOUNT_INDEX = 21
         TRADE_SHARE_PRICE_INDEX = 28
+
+        if special_sell:
+            TRADE_PRICE_AMOUNT_INDEX = 19
 
         date_time_string = ' '.join([
             trade_description_parts[TRADE_DATETIME_MONTH_INDEX],
