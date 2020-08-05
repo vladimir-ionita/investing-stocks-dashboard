@@ -35,4 +35,4 @@ class StockTrade(models.Model):
 
     def __str__(self):
         trade_type_name = "Buy" if self.trade_type else "Sell"
-        return "{} {}".format(trade_type_name, self.stock)
+        return "{} {}".format(trade_type_name, self.stock.symbol)
