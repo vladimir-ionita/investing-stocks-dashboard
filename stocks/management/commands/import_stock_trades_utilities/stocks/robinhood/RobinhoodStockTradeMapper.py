@@ -19,9 +19,9 @@ class RobinhoodStockTradeFactory:
     def make_stock_trade_from_email_body(cls, email_body):
         body_parts = email_body.split('\n')
         for line in body_parts:
-            if line.startswith("Your market order") \
-                    and "was partially executed" not in line \
-                    and "was canceled on" not in line:
+            if "was partially executed" in line or "was canceled on" in line:
+                continue
+            if "Your market order" in line or "Your limit order" in line:
                 return cls.make_stock_trade_from_trade_description(line)
         return None
 
