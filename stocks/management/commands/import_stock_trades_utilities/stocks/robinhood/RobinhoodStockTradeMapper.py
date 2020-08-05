@@ -27,11 +27,18 @@ class RobinhoodStockTradeFactory:
 
     @classmethod
     def make_stock_trade_from_trade_description(cls, trade_description):
+        trade_description = cls.__remove_html_tags(trade_description)
         trade_description_parts = trade_description.split(' ')
         if cls.__check_if_whole_share_trade(trade_description_parts):
             return cls.__make_whole_share_trade(trade_description_parts)
         else:
             return cls.__make_fractional_share_trade(trade_description_parts)
+
+    @classmethod
+    def __remove_html_tags(cls, text):
+        import re
+        html_tag_re = re.compile(r'<[^>]+>')
+        return html_tag_re.sub('', text)
 
     @classmethod
     def __check_if_whole_share_trade(cls, trade_description_parts):
