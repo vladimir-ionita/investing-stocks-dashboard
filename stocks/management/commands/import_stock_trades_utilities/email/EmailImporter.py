@@ -64,7 +64,7 @@ class EmailImporter:
                     else:
                         body = msg.get_payload(decode=True).decode()
                     if body is None:
-                        raise Exception("Couldn't find a body for the email with id: {}".format(email_id))
+                        continue
 
                     email_body_list.append(body)
                     if self.verbose:
