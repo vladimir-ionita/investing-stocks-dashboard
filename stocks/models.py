@@ -17,7 +17,7 @@ class BrokerageService(models.Model):
 
 
 class StockTrade(models.Model):
-    stock = models.ForeignKey(StockSymbol, on_delete=models.CASCADE)
+    stock = models.ForeignKey(StockSymbol, on_delete=models.CASCADE, related_name='stock_trades')
     time = models.DateTimeField()
     share_price = models.DecimalField(decimal_places=2, max_digits=7+2)
     share_amount = models.DecimalField(decimal_places=6, max_digits=7+6)
