@@ -26,7 +26,7 @@ class StockTrade(models.Model):
         (True, 'Buy'),
         (False, 'Sell')
     ))
-    brokerage_service = models.ForeignKey(BrokerageService, on_delete=models.CASCADE)
+    brokerage_service = models.ForeignKey(BrokerageService, on_delete=models.CASCADE, related_name='stock_trades')
 
     class Meta:
         constraints = [
