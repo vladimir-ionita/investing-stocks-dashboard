@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+    <div class="table-responsive">
+        {% include 'stocks/snippets/stocks-table.html' with stocks_description_fields=stocks_description_fields stocks_description=stocks_description %}
+    </div>
 {% endblock content %}

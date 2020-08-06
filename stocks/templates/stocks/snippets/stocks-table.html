@@ -1,0 +1,20 @@
+<table class="table table-sm table-striped table-hover">
+	<thead>
+	<tr>
+        {% for header in stocks_description_fields %}
+            <th>{{ header }}</th>
+        {% endfor %}
+	</tr>
+	</thead>
+	<tbody>
+        {% for description in stocks_description %}
+            <tr>
+                <td>{{ description.stock }}</td>
+                <td>{{ description.shares|floatformat:6 }}</td>
+                <td>{{ description.investments|floatformat:2 }}</td>
+                <td>{{ description.cheapest_share|floatformat:2 }}</td>
+                <td>{{ description.most_expensive_share|floatformat:2 }}</td>
+            </tr>
+        {% endfor %}
+	</tbody>
+</table>
