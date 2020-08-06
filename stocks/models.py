@@ -27,6 +27,10 @@ class StockSymbol(models.Model):
 
         return bought_shares - sold_shares
 
+    @property
+    def investments_made(self):
+        return self.stock_trades.filter(trade_type=True).aggregate(sum=Sum('total_amount'))['sum']
+    
 
 class BrokerageService(models.Model):
     name = models.CharField(max_length=100)
