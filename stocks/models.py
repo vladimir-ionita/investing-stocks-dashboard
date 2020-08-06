@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import Sum, Min
+from django.db.models import Sum, Min, Max
 
 import decimal
 
@@ -34,6 +34,10 @@ class StockSymbol(models.Model):
     @property
     def cheapest_share_price(self):
         return self.stock_trades.filter(trade_type=True).aggregate(min=Min('share_price'))['min']
+
+    @property
+    def most_expensive_share_price(self):
+        return self.stock_trades.filter(trade_type=True).aggregate(max=Max('share_price'))['max']
 
 
 class BrokerageService(models.Model):
