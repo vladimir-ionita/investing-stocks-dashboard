@@ -30,6 +30,20 @@ class StockSymbol(models.Model):
     @property
     def investments_made(self):
         return self.stock_trades.filter(trade_type=True).aggregate(sum=Sum('total_amount'))['sum']
+
+    @property
+    def current_investments(self):
+        buy_trades = self.stock_trades.filter(trade_type=True)
+        investment = buy_trades.aggregate(sum=Sum('total_amount'))['sum'] \
+            if buy_trades.count() > 0 \
+            else decimal.Decimal(0)
+
+        sell_trades = self.stock_trades.filter(trade_type=False)
+        divestment = sell_trades.aggregate(sum=Sum('total_amount'))['sum'] \
+            if sell_trades.count() > 0 \
+            else decimal.Decimal(0)
+
+        return max(investment - divestment, 0)
     
     @property
     def cheapest_share_price(self):
