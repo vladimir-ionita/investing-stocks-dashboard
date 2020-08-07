@@ -13,14 +13,12 @@ class StockSymbol(models.Model):
 
     @property
     def shares_owned(self):
-        stock_trade_list = self.stock_trades
-
-        buy_trades = stock_trade_list.filter(trade_type=True)
+        buy_trades = self.stock_trades.filter(trade_type=True)
         bought_shares = buy_trades.aggregate(sum=Sum('share_amount'))['sum'] \
             if buy_trades.count() > 0 \
             else decimal.Decimal(0.0)
 
-        sell_trades = stock_trade_list.filter(trade_type=False)
+        sell_trades = self.stock_trades.filter(trade_type=False)
         sold_shares = sell_trades.aggregate(sum=Sum('share_amount'))['sum'] \
             if sell_trades.count() > 0 \
             else decimal.Decimal(0.0)
