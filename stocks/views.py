@@ -14,7 +14,7 @@ def stocks_page_view(request):
         stock_description = {
             'stock': stock_symbol.symbol,
             'shares': stock_symbol.shares_owned,
-            'investments': stock_symbol.investments_made,
+            'current_investments': stock_symbol.current_investments,
             'cheapest_share': stock_symbol.cheapest_share_price,
             'most_expensive_share': stock_symbol.most_expensive_share_price
         }
@@ -24,11 +24,11 @@ def stocks_page_view(request):
         'stocks_description_fields': [
             'Stock',
             'Shares',
-            'Investments*',
+            'Current Investments',
             'Cheapest share price',
             'Most expensive share'
         ],
-        'stocks_description': context_stocks
+        'stocks_description': context_stocks,
     }
 
     return render(request, "stocks/stocks.html", context)
